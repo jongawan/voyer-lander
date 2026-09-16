@@ -42,36 +42,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- Brochure download form ---
-  // NOTE FOR DEV: this currently only captures the lead client-side and
-  // triggers the local placeholder brochure download. Wire `action` up to
-  // your lead backend (Google Sheets Apps Script endpoint, Formspree, etc.)
-  // before going live — see README.md.
-  const brochureForm = document.getElementById('brochure-form');
-  if (brochureForm) {
-    brochureForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = brochureForm.querySelector('[name="name"]').value.trim();
-      const phone = brochureForm.querySelector('[name="phone"]').value.trim();
-      if (!name || !phone) return;
+  // --- Consultation form: build a pre-filled WhatsApp message ---
+  const WA_NUMBER = '6282117777290';
+  const FIELD_LABELS = {
+    name: 'Nama',
+    phone: 'No. WhatsApp',
+    location: 'Lokasi',
+    service: 'Jenis Layanan',
+    scope: 'Ruang Lingkup',
+    room: 'Ruangan',
+    area: 'Estimasi Luas (m²)',
+    landarea: 'Luas Tanah (m²)',
+  };
 
-      // TODO: replace with a real POST to your lead-capture endpoint
-      // fetch('YOUR_ENDPOINT', { method: 'POST', body: new FormData(brochureForm) });
-
-      const success = document.getElementById('brochure-success');
-      if (success) success.classList.add('visible');
-      brochureForm.reset();
-
-      const dl = document.createElement('a');
-      dl.href = 'assets/voyer-brochure.pdf';
-      dl.download = 'Voyer-Design-Brosur.pdf';
-      document.body.appendChild(dl);
-      dl.click();
-      dl.remove();
-    });
-  }
-
-  // --- Consultation form ---
   const consultForm = document.getElementById('consult-form');
   if (consultForm) {
     consultForm.addEventListener('submit', (e) => {
@@ -80,15 +63,21 @@ document.addEventListener('DOMContentLoaded', () => {
       const phone = consultForm.querySelector('[name="phone"]').value.trim();
       if (!name || !phone) return;
 
-      // TODO: replace with a real POST to your lead-capture endpoint
-      // fetch('YOUR_ENDPOINT', { method: 'POST', body: new FormData(consultForm) });
+      const lines = [];
+      Array.from(consultForm.elements).forEach((el) => {
+        const label = FIELD_LABELS[el.name];
+        const value = el.value && el.value.trim();
+        if (label && value) lines.push(`${label}: ${value}`);
+      });
+
+      const message = `Halo Voyer Design, saya ingin konsultasi gratis dengan detail berikut:\n\n${lines.join('\n')}`;
+      const waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
 
       const success = document.getElementById('consult-success');
-      const formEl = consultForm;
-      if (success) {
-        success.classList.add('visible');
-        formEl.style.display = 'none';
-      }
+      if (success) success.classList.add('visible');
+
+      window.open(waUrl, '_blank', 'noopener');
+      consultForm.reset();
     });
   }
 

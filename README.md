@@ -11,10 +11,9 @@ plain HTML/CSS/JS, so it deploys on Vercel with default settings.
 ├── interior.html        Interior design landing page
 ├── arsitektur.html      Architecture / Design & Build landing page
 ├── css/style.css        Shared design system
-├── js/main.js           Mobile nav, FAQ accordion, form handlers
+├── js/main.js           Mobile nav, FAQ accordion, consultation form → WhatsApp
 └── assets/
-    ├── img/              Logo + project photos (cropped from client IG — see note below)
-    └── voyer-brochure.pdf  Placeholder brochure (swap for real one)
+    └── img/              Logo + project photos (cropped from client IG — see note below)
 ```
 
 ## Run locally
@@ -37,34 +36,28 @@ No build tools needed. Either:
 
 ## Before running ads — things to wire up
 
-**1. Lead capture backend (important — forms currently don't send anywhere)**
-Both the brochure-download form and the consultation form only work
-client-side right now (they show a success message and, for the brochure
-form, trigger a local PDF download). Nothing is actually saved or sent.
-Wire up `js/main.js` (`brochureForm` and `consultForm` submit handlers) to a
-real endpoint — e.g. reuse the Google Sheets Apps Script pattern from the
-SMCI Orderflow lander, or a service like Formspree. The `// TODO` comments
-mark exactly where to add the `fetch(...)` call.
+**1. Lead flow is WhatsApp-only by design**
+There's no backend and no lead magnet — the consultation form on each page
+(`#consult-form` in `js/main.js`) reads whatever fields are filled in,
+formats them into a message, and opens `wa.me` in a new tab with the text
+pre-filled. The visitor still has to hit "send" in WhatsApp. Nothing is
+stored server-side; if you want captured leads persisted somewhere (Sheets,
+CRM, etc.) that needs to be added separately.
 
-**2. Real brochure PDF**
-`assets/voyer-brochure.pdf` is a placeholder built from IG photos so the
-download button works end-to-end today. Replace with a real designed PDF
-before launch.
-
-**3. Photos are cropped from Instagram screenshots**
+**2. Photos are cropped from Instagram screenshots**
 The images in `assets/img/` were cropped from the client's own IG grid
 screenshots as placeholders so the site isn't full of gray boxes. Swap in
 proper high-res exports from the client's project folders before running
 paid traffic — screenshot crops will look soft at large hero sizes on
 bigger screens.
 
-**4. Meta Pixel / conversion tracking**
+**3. Meta Pixel / conversion tracking**
 No tracking pixel is installed yet. Add Meta Pixel / Google Ads tag to the
 `<head>` of all three pages (and fire a custom conversion event on
-`brochureForm` and `consultForm` submit, and on WhatsApp button clicks)
-before spending ad budget.
+`consultForm` submit and on WhatsApp button clicks) before spending ad
+budget.
 
-**5. WhatsApp number**
+**4. WhatsApp number**
 All WA links point to `6282117777290` (from the main site). Confirm this is
 the number sales reps are actually monitoring for this campaign.
 
