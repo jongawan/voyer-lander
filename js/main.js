@@ -53,6 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
     room: 'Ruangan',
     area: 'Estimasi Luas (m²)',
     landarea: 'Luas Tanah (m²)',
+    style: 'Gaya Desain Disukai',
+    timeline: 'Kapan Ingin Mulai',
   };
 
   const consultForm = document.getElementById('consult-form');
