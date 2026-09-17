@@ -1,5 +1,38 @@
 // Voyer Design landing — shared behavior
 
+// --- Lead tracking: log to Google Sheet + push GTM event ---
+var SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxi1xU0WW1G16qbBd7T5gHDI-ZQSzLe43zp7suvwR_y2cDkj8TGtalUAwfsBSLVcYWv/exec';
+
+function sendLeadToSheetAndGTM(fields) {
+  // 1) Log the lead to Google Sheets. Fire-and-forget — we don't await
+  //    this, so it never delays or blocks the WhatsApp redirect.
+  //    Content-Type text/plain is intentional: it avoids a CORS preflight
+  //    request that Apps Script Web Apps don't handle, while Apps Script
+  //    still reads the body fine with JSON.parse(e.postData.contents).
+  try {
+    fetch(SHEET_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(fields)
+    }).catch(function (err) {
+      console.warn('Voyer lead: sheet log failed', err);
+    });
+  } catch (err) {
+    console.warn('Voyer lead: sheet log failed', err);
+  }
+
+  // 2) Push a dataLayer event. GTM (GTM-KWXCRCVG, already installed on
+  //    the page) listens for this via a Custom Event trigger and fires
+  //    the GA4 event tag + Google Ads conversion tag from there.
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'generate_lead',
+    lead_ruang_lingkup: fields.ruangLingkup || '',
+    lead_lokasi: fields.lokasi || '',
+    lead_gaya_desain: fields.gayaDesain || ''
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 
   // Mobile nav toggle
@@ -74,6 +107,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const message = `Halo Voyer Design, saya ingin konsultasi gratis dengan detail berikut:\n\n${lines.join('\n')}`;
       const waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
+
+      const getValue = (fieldName) => {
+        const el = consultForm.querySelector(`[name="${fieldName}"]`);
+        return el ? el.value.trim() : '';
+      };
+
+      sendLeadToSheetAndGTM({
+        nama: name,
+        whatsapp: phone,
+        lokasi: getValue('location'),
+        ruangLingkup: getValue('scope'),
+        luasTanah: getValue('landarea'),
+        gayaDesain: getValue('style'),
+        kapanMulai: getValue('timeline'),
+      });
 
       const success = document.getElementById('consult-success');
       if (success) success.classList.add('visible');
