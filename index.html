@@ -331,18 +331,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <input class="field" type="text" name="name" placeholder="Nama lengkap" required>
           <input class="field" type="tel" name="phone" placeholder="Nomor WhatsApp" required>
         </div>
-        <input class="field" type="text" name="location" placeholder="Lokasi lahan (kota)">
+        <input class="field" type="text" name="location" placeholder="Lokasi lahan (kota)" required>
         <div class="form-row">
-          <select class="field" name="scope">
+          <select class="field" name="scope" required>
             <option value="">Ruang lingkup</option>
             <option>Design and Build</option>
             <option>Design Only</option>
             <option>Build Only</option>
           </select>
-          <input class="field" type="text" name="landarea" placeholder="Luas tanah (m²)">
+          <input class="field" type="text" name="landarea" placeholder="Luas tanah (m²)" required>
         </div>
         <div class="form-row">
-          <select class="field" name="style">
+          <select class="field" name="style" required>
             <option value="">Gaya desain yang disukai</option>
             <option>Modern Luxury</option>
             <option>Klasik / American Classic</option>
@@ -351,7 +351,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <option>Minimalis</option>
             <option>Belum yakin</option>
           </select>
-          <select class="field" name="timeline">
+          <select class="field" name="timeline" required>
             <option value="">Kapan rencana mulai?</option>
             <option>Segera (&lt;1 bulan)</option>
             <option>1&ndash;3 bulan</option>
