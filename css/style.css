@@ -163,6 +163,13 @@ p { margin: 0; }
 }
 .btn-outline:hover { border-color: var(--brass); color: var(--brass); }
 
+.btn-wa {
+  background: var(--wa);
+  color: #ffffff;
+}
+.btn-wa:hover { background: #1fbd5c; }
+.btn-wa svg { width: 18px; height: 18px; flex-shrink: 0; }
+
 .btn-brass {
   background: var(--brass);
   color: #fff;
