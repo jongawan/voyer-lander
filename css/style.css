@@ -170,6 +170,26 @@ p { margin: 0; }
 .btn-wa:hover { background: #1fbd5c; }
 .btn-wa svg { width: 18px; height: 18px; flex-shrink: 0; }
 
+/* ---------- Sticky WA button (floating) ---------- */
+
+.wa-float {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 60;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--wa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+.wa-float:hover { transform: scale(1.08); }
+.wa-float svg { width: 24px; height: 24px; color: #ffffff; }
+
 .btn-brass {
   background: var(--brass);
   color: #fff;
