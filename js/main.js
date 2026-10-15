@@ -75,6 +75,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // --- Google Ads conversion tracking for every WhatsApp link ---
+  // These links all open in a new tab (target="_blank"), so the current
+  // page never unloads — no need to delay navigation for the conversion
+  // ping to land, unlike Google's standard same-tab redirect snippet.
+  document.querySelectorAll('a[href*="wa.me"]').forEach((link) => {
+    link.addEventListener('click', () => {
+      if (typeof gtag_report_conversion === 'function') {
+        gtag_report_conversion();
+      }
+    });
+  });
+
   // --- Consultation form: build a pre-filled WhatsApp message ---
   const WA_NUMBER = '6282117777290';
   const FIELD_LABELS = {
